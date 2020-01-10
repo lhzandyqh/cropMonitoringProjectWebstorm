@@ -18,6 +18,8 @@ import './icons' // icon
 import './errorLog' // error log
 import './permission' // permission control
 import './mock' // simulation data
+import  'echarts/theme/shine.js'
+import 'jquery'
 
 import * as filters from './filters' // global filters
 

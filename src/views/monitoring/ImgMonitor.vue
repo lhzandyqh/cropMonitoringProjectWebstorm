@@ -30,7 +30,7 @@
       <el-col :span="20">
         <div class="until">
           <div class="until_div">
-            <el-input v-model="input1" placeholder="选择时间间隔" class="input-with-select" style="margin-top: 5px">
+            <el-input v-model="input1" placeholder="选择时间间隔" class="input-with-select" style="margin-top: 5px;margin-left: 25px">
               <el-select slot="append" v-model="select" placeholder="选择时间间隔">
                 <el-option label="一天" value="1" />
                 <el-option label="三天" value="2" />
@@ -40,7 +40,7 @@
           </div>
           <div class="until_div">
             <div class="date_text">
-              <span>开始时间:</span>
+              <span style="font-size: 15px">开始时间:</span>
             </div>
             <el-date-picker
               v-model="start_date"
@@ -52,7 +52,7 @@
           </div>
           <div class="until_div">
             <div class="date_text">
-              <span>结束时间:</span>
+              <span style="font-size: 15px">结束时间:</span>
             </div>
             <el-date-picker
               v-model="end_date"

@@ -27,6 +27,7 @@
               action="http://zhongkeruitong.top/crops/crops/uploadCropsPic"
               list-type="picture-card"
               name="file"
+              :on-progress="uploading"
               :on-success="handleSuccess"
               :on-error="handleError"
               :on-preview="handlePictureCardPreview"
@@ -94,6 +95,13 @@ export default {
   methods: {
     open_import() {
       this.dialogVisible = true
+    },
+    uploading: function() {
+      this.$message({
+        type: 'info',
+        message: '图片正在上传',
+        duration: 6000
+      })
     },
     handleRemove(file, fileList) {
       console.log(file, fileList)

@@ -1,10 +1,66 @@
 <template>
   <div class="containers">
     <div id="mycharts" style="width: 100%;height: 500px;"></div>
-    <div id="BaiduContainer" style="height: 600px;width: 50%;float: left"></div>
-    <div style="float: left;width: 50%">
-      <div id="mychart" style="width: 100%;height: 300px;"></div>
-      <div id="mychart2" style="width: 100%;height: 300px;"></div>
+<!--    <div id="BaiduContainer" style="height: 600px;width: 50%;float: left;margin-top: 50px"></div>-->
+    <div id="myMap" style="height: 600px;width: 50%;float: left;margin-top: 50px"></div>
+    <div style="float: left;width: 50%;margin-top: 50px">
+      <div class="mychart" style="width: 100%;height: 300px;">
+        <div style="text-align: center">
+          <span style="color: #008acd;font-weight:normal;font-size: 18px">保单统计信息</span>
+        </div>
+        <div style="margin-top: 40px">
+          <span style="margin-left: 40px;font-weight: bolder">全部保单：8426单</span>
+        </div>
+        <div style="margin-top: 20px">
+          <el-row>
+            <el-col :span="10">
+              <div>
+                <span style="margin-left: 40px;font-size: 15px;color: #6f6f6f">正在理赔保单：425单</span>
+              </div>
+            </el-col>
+            <el-col :span="14">
+              <el-progress stroke-width="9" :percentage="50"></el-progress>
+            </el-col>
+          </el-row>
+        </div>
+        <div style="margin-top: 20px">
+          <el-row>
+            <el-col :span="10">
+              <div>
+                <span style="margin-left: 40px;font-size: 15px;color: #6f6f6f">预警理赔保单：245单</span>
+              </div>
+            </el-col>
+            <el-col :span="14">
+              <el-progress stroke-width="9" :percentage="23":color="warnColor" ></el-progress>
+            </el-col>
+          </el-row>
+        </div>
+        <div style="margin-top: 20px">
+          <el-row>
+            <el-col :span="10">
+              <div>
+                <span style="margin-left: 40px;font-size: 15px;color: #6f6f6f">理赔完成保单：825单</span>
+              </div>
+            </el-col>
+            <el-col :span="14">
+              <el-progress stroke-width="9" :percentage="67" :color="doneColor"></el-progress>
+            </el-col>
+          </el-row>
+        </div>
+        <div style="margin-top: 20px">
+          <el-row>
+            <el-col :span="10">
+              <div>
+                <span style="margin-left: 40px;font-size: 15px;color: #6f6f6f">报案保单：505单</span>
+              </div>
+            </el-col>
+            <el-col :span="14">
+              <el-progress stroke-width="9" :percentage="70":color="upColor"></el-progress>
+            </el-col>
+          </el-row>
+        </div>
+      </div>
+      <div id="mychart2" style="width: 100%;height: 300px;margin-left: 30px"></div>
     </div>
   </div>
 </template>
@@ -12,14 +68,104 @@
 <script>
 import BMap from 'BaiduMap'
 import echarts from 'echarts'
-require('echarts/theme/macarons')
+import JSON from '../../../assets/shijiazhuang.json'
+import  'echarts/theme/macarons.js'
+// require('echarts/theme/macarons')
 export default {
   name: 'DashboardAdmin',
+  data() {
+    return {
+      warnColor: '#ee1521',
+      doneColor: '#50d92d',
+      upColor: '#e4c25f',
+      option: {
+        title: {
+          top: '3%',
+          left: '5%',
+          textStyle: {
+            fontSize: 18,
+            fontWeight: 300,
+            color: '#b6d7ff'
+          }
+        },
+        // tooltip: {
+        //   padding: 0,
+        //   backgroundColor: 'transparent',
+        // },
+        // legend: {
+        //   orient: 'vertical',
+        //   top: '9%',
+        //   left: '5%',
+        //   icon: 'circle',
+        //   data: [],
+        //   selectedMode: 'single',
+        //   selected: {},
+        //   itemWidth: 12,
+        //   itemHeight: 12,
+        //   itemGap: 30,
+        //   inactiveColor: '#b6d7ff',
+        //   textStyle: {
+        //     color: '#ec808d',
+        //     fontSize: 14,
+        //     fontWeight: 300,
+        //     padding: [0, 0, 0, 15]
+        //   }
+        // },
+        // visualMap: {
+        //   min: 0,
+        //   max: 500,
+        //   show: false,
+        //   splitNumber: 5,
+        //   inRange: {
+        //     color: ['#FACD91', '#74DFB2', '#81D3F8', '#768FDE', '#e9969f'].reverse()
+        //   },
+        //   textStyle: {
+        //     color: '#fff'
+        //   }
+        // },
+        geo: {
+          map: '河北',
+          label: {
+            normal: {
+              show: true,
+              color: '#000'
+            },
+            emphasis: {
+              show: true,
+              color: '#fff'
+            }
+          },
+          roam: false,
+          itemStyle: {
+            normal: {
+              areaColor: '#1ea7ff',
+              borderColor: '#6367ad',
+              borderWidth: 1
+            },
+            emphasis: {
+              areaColor: '#9ea3fe' // hover效果
+            }
+          },
+          left: '5%',
+          right: '5%',
+          top: '5%',
+          bottom: '5%'
+        },
+        // series: [{
+        //   name: '年度总项目数据查询',
+        //   type: 'map',
+        //   geoIndex: 0, // 不可缺少，否则无tooltip 指示效果
+        //   data: []
+        // }]
+      }
+    }
+  },
   mounted() {
     setTimeout(() => {
       this.init()
     }, 200)
-    this.initechart()
+    this.initMap()
+    // this.initechart()
     this.initechart2()
     this.initechart3()
   },
@@ -52,7 +198,6 @@ export default {
     },
     initechart() {
       var myChart = echarts.init(document.getElementById('mychart'), 'macarons')
-      app.title = '多 Y 轴示例';
 
       var colors = ['#5793f3', '#d14a61', '#675bba'];
 
@@ -377,11 +522,11 @@ export default {
               {data: dataMap.dataPI['2010']},
               {data: dataMap.dataSI['2010']},
               {data: dataMap.dataTI['2010']},
-              {data: [
-                  {name:'农作物理赔量', value: dataMap.dataPI['2010sum']},
-                  {name: '投保量', value: dataMap.dataSI['2010sum']},
-                  // {name: '第三产业', value: dataMap.dataTI['2010sum']}
-                ]}
+              // {data: [
+              //     {name:'农作物理赔量', value: dataMap.dataPI['2010sum']},
+              //     {name: '投保量', value: dataMap.dataSI['2010sum']},
+              //     // {name: '第三产业', value: dataMap.dataTI['2010sum']}
+              //   ]}
             ]
           },
           {
@@ -393,11 +538,11 @@ export default {
               {data: dataMap.dataPI['2011']},
               {data: dataMap.dataSI['2011']},
               {data: dataMap.dataTI['2011']},
-              {data: [
-                  {name: '农作物理赔量', value: dataMap.dataPI['2011sum']},
-                  {name:  '投保量',value: dataMap.dataSI['2011sum']},
-                  // {name: '第三产业', value: dataMap.dataTI['2011sum']}
-                ]}
+              // {data: [
+              //     {name: '农作物理赔量', value: dataMap.dataPI['2011sum']},
+              //     {name:  '投保量',value: dataMap.dataSI['2011sum']},
+              //     // {name: '第三产业', value: dataMap.dataTI['2011sum']}
+              //   ]}
             ]
           },
           {
@@ -409,11 +554,11 @@ export default {
               {data: dataMap.dataPI['2012']},
               {data: dataMap.dataSI['2012']},
               {data: dataMap.dataTI['2012']},
-              {data: [
-                  {name: '农作物理赔量', value: dataMap.dataPI['2012sum']},
-                  {name:  '投保量',value: dataMap.dataSI['2012sum']},
-                  // {name: '第三产业', value: dataMap.dataTI['2012sum']}
-                ]}
+              // {data: [
+              //     {name: '农作物理赔量', value: dataMap.dataPI['2012sum']},
+              //     {name:  '投保量',value: dataMap.dataSI['2012sum']},
+              //     // {name: '第三产业', value: dataMap.dataTI['2012sum']}
+              //   ]}
             ]
           },
           {
@@ -425,11 +570,11 @@ export default {
               {data: dataMap.dataPI['2013']},
               {data: dataMap.dataSI['2013']},
               {data: dataMap.dataTI['2013']},
-              {data: [
-                  {name: '农作物理赔量',value: dataMap.dataPI['2013sum']},
-                  {name: '投保量', value: dataMap.dataSI['2013sum']},
-                  // {name: '第三产业', value: dataMap.dataTI['2013sum']}
-                ]}
+              // {data: [
+              //     {name: '农作物理赔量',value: dataMap.dataPI['2013sum']},
+              //     {name: '投保量', value: dataMap.dataSI['2013sum']},
+              //     // {name: '第三产业', value: dataMap.dataTI['2013sum']}
+              //   ]}
             ]
           },
           {
@@ -441,11 +586,11 @@ export default {
               {data: dataMap.dataPI['2014']},
               {data: dataMap.dataSI['2014']},
               {data: dataMap.dataTI['2014']},
-              {data: [
-                  {name: '农作物理赔量', value: dataMap.dataPI['2014sum']},
-                  {name: '投保量', value: dataMap.dataSI['2014sum']},
-                  // {name: '第三产业', value: dataMap.dataTI['2014sum']}
-                ]}
+              // {data: [
+              //     {name: '农作物理赔量', value: dataMap.dataPI['2014sum']},
+              //     {name: '投保量', value: dataMap.dataSI['2014sum']},
+              //     // {name: '第三产业', value: dataMap.dataTI['2014sum']}
+              //   ]}
             ]
           },
           {
@@ -457,11 +602,11 @@ export default {
               {data: dataMap.dataPI['2015']},
               {data: dataMap.dataSI['2015']},
               {data: dataMap.dataTI['2015']},
-              {data: [
-                  {name: '农作物理赔量', value: dataMap.dataPI['2015sum']},
-                  {name:  '投保量',value: dataMap.dataSI['2015sum']},
-                  // {name: '第三产业', value: dataMap.dataTI['2015sum']}
-                ]}
+              // {data: [
+              //     {name: '农作物理赔量', value: dataMap.dataPI['2015sum']},
+              //     {name:  '投保量',value: dataMap.dataSI['2015sum']},
+              //     // {name: '第三产业', value: dataMap.dataTI['2015sum']}
+              //   ]}
             ]
           },
           {
@@ -473,11 +618,11 @@ export default {
               {data: dataMap.dataPI['2016']},
               {data: dataMap.dataSI['2016']},
               {data: dataMap.dataTI['2016']},
-              {data: [
-                  {name: '农作物理赔量', value: dataMap.dataPI['2016sum']},
-                  {name:  '投保量',value: dataMap.dataSI['2016sum']},
-                  // {name: '第三产业', value: dataMap.dataTI['2016sum']}
-                ]}
+              // {data: [
+              //     {name: '农作物理赔量', value: dataMap.dataPI['2016sum']},
+              //     {name:  '投保量',value: dataMap.dataSI['2016sum']},
+              //     // {name: '第三产业', value: dataMap.dataTI['2016sum']}
+              //   ]}
             ]
           },
           {
@@ -489,11 +634,11 @@ export default {
               {data: dataMap.dataPI['2017']},
               {data: dataMap.dataSI['2017']},
               {data: dataMap.dataTI['2017']},
-              {data: [
-                  {name: '农作物理赔量', value: dataMap.dataPI['2017sum']},
-                  {name: '投保量', value: dataMap.dataSI['2017sum']},
-                  // {name: '第三产业', value: dataMap.dataTI['2017sum']}
-                ]}
+              // {data: [
+              //     {name: '农作物理赔量', value: dataMap.dataPI['2017sum']},
+              //     {name: '投保量', value: dataMap.dataSI['2017sum']},
+              //     // {name: '第三产业', value: dataMap.dataTI['2017sum']}
+              //   ]}
             ]
           },
           {
@@ -505,11 +650,11 @@ export default {
               {data: dataMap.dataPI['2018']},
               {data: dataMap.dataSI['2018']},
               {data: dataMap.dataTI['2018']},
-              {data: [
-                  {name: '农作物理赔量', value: dataMap.dataPI['2018sum']},
-                  {name: '投保量', value: dataMap.dataSI['2018sum']},
-                  // {name: '第三产业', value: dataMap.dataTI['2018sum']}
-                ]}
+              // {data: [
+              //     {name: '农作物理赔量', value: dataMap.dataPI['2018sum']},
+              //     {name: '投保量', value: dataMap.dataSI['2018sum']},
+              //     // {name: '第三产业', value: dataMap.dataTI['2018sum']}
+              //   ]}
             ]
           },
           {
@@ -521,11 +666,11 @@ export default {
               {data: dataMap.dataPI['2019']},
               {data: dataMap.dataSI['2019']},
               {data: dataMap.dataTI['2019']},
-              {data: [
-                  {name: '农作物理赔量', value: dataMap.dataPI['2019sum']},
-                  {name: '投保量', value: dataMap.dataSI['2019sum']},
-                  // {name: '第三产业', value: dataMap.dataTI['2019sum']}
-                ]}
+              // {data: [
+              //     {name: '农作物理赔量', value: dataMap.dataPI['2019sum']},
+              //     {name: '投保量', value: dataMap.dataSI['2019sum']},
+              //     // {name: '第三产业', value: dataMap.dataTI['2019sum']}
+              //   ]}
             ]
           }
         ]
@@ -533,90 +678,189 @@ export default {
       myChart.setOption(option)
     },
     initechart3 () {
-      var myChart = echarts.init(document.getElementById('mychart2'))
-      var base = +new Date(2010, 9, 3);
-      var oneDay = 24 * 3600 * 1000;
-      var date = [];
+      var myChart = echarts.init(document.getElementById('mychart2'),'macarons')
+      // var base = +new Date(2010, 9, 3);
+      // var oneDay = 24 * 3600 * 1000;
+      // var date = [];
+      //
+      // var data = [Math.random() * 300];
+      //
+      // for (var i = 1; i < 2000; i++) {
+      //   var now = new Date(base += oneDay);
+      //   date.push([now.getFullYear(), now.getMonth() + 1, now.getDate()].join('/'));
+      //   data.push(Math.round((Math.random() - 0.5) * 20 + data[i - 1]));
+      // }
 
-      var data = [Math.random() * 300];
-
-      for (var i = 1; i < 2000; i++) {
-        var now = new Date(base += oneDay);
-        date.push([now.getFullYear(), now.getMonth() + 1, now.getDate()].join('/'));
-        data.push(Math.round((Math.random() - 0.5) * 20 + data[i - 1]));
-      }
-
+      // var option = {
+      //   tooltip: {
+      //     trigger: 'axis',
+      //     position: function (pt) {
+      //       return [pt[0], '10%'];
+      //     }
+      //   },
+      //   title: {
+      //     left: 'center',
+      //     text: '农作物受灾面积统计',
+      //   },
+      //   toolbox: {
+      //     feature: {
+      //       dataZoom: {
+      //         yAxisIndex: 'none'
+      //       },
+      //       restore: {},
+      //       saveAsImage: {}
+      //     }
+      //   },
+      //   xAxis: {
+      //     type: 'category',
+      //     boundaryGap: false,
+      //     data: date
+      //   },
+      //   yAxis: {
+      //     type: 'value',
+      //     boundaryGap: [0, '100%']
+      //   },
+      //   dataZoom: [{
+      //     type: 'inside',
+      //     start: 0,
+      //     end: 10
+      //   }, {
+      //     start: 0,
+      //     end: 10,
+      //     handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
+      //     handleSize: '80%',
+      //     handleStyle: {
+      //       color: '#fff',
+      //       shadowBlur: 3,
+      //       shadowColor: 'rgba(0, 0, 0, 0.6)',
+      //       shadowOffsetX: 2,
+      //       shadowOffsetY: 2
+      //     }
+      //   }],
+      //   series: [
+      //     {
+      //       name:'模拟数据',
+      //       type:'line',
+      //       smooth:true,
+      //       symbol: 'none',
+      //       sampling: 'average',
+      //       itemStyle: {
+      //         color: 'rgb(255, 70, 131)'
+      //       },
+      //       areaStyle: {
+      //         color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+      //           offset: 0,
+      //           color: 'rgb(255, 158, 68)'
+      //         }, {
+      //           offset: 1,
+      //           color: 'rgb(255, 70, 131)'
+      //         }])
+      //       },
+      //       data: data
+      //     }
+      //   ]
+      // }
       var option = {
+          title: {
+            left: 'center',
+            text: '理赔信息',
+          },
         tooltip: {
-          trigger: 'axis',
-          position: function (pt) {
-            return [pt[0], '10%'];
-          }
+          trigger: 'item',
+          formatter: '{a} <br/>{b}: {c} ({d}%)'
         },
-        title: {
-          left: 'center',
-          text: '农作物受灾面积统计',
+        legend: {
+          orient: 'vertical',
+          left: 10,
+          data: ['油菜花', '棉花', '其他']
         },
-        toolbox: {
-          feature: {
-            dataZoom: {
-              yAxisIndex: 'none'
-            },
-            restore: {},
-            saveAsImage: {}
-          }
-        },
-        xAxis: {
-          type: 'category',
-          boundaryGap: false,
-          data: date
-        },
-        yAxis: {
-          type: 'value',
-          boundaryGap: [0, '100%']
-        },
-        dataZoom: [{
-          type: 'inside',
-          start: 0,
-          end: 10
-        }, {
-          start: 0,
-          end: 10,
-          handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
-          handleSize: '80%',
-          handleStyle: {
-            color: '#fff',
-            shadowBlur: 3,
-            shadowColor: 'rgba(0, 0, 0, 0.6)',
-            shadowOffsetX: 2,
-            shadowOffsetY: 2
-          }
-        }],
         series: [
           {
-            name:'模拟数据',
-            type:'line',
-            smooth:true,
-            symbol: 'none',
-            sampling: 'average',
-            itemStyle: {
-              color: 'rgb(255, 70, 131)'
+            name: '农作物',
+            type: 'pie',
+            radius: ['50%', '70%'],
+            center: ['25%', '50%'],
+            avoidLabelOverlap: false,
+            label: {
+              normal: {
+                show: true,
+                position: 'center',
+                formatter:function (argument) {
+                  var html;
+                  html='理赔总面积\r\n\r\n'+'300亩';
+                  return html;
+                },
+                textStyle:{
+                  fontSize: 17,
+                  color:'#000'
+                }
+              },
+              emphasis: {
+                show: false,
+                textStyle: {
+                  fontSize: '30',
+                  fontWeight: 'bold'
+                }
+              }
             },
-            areaStyle: {
-              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                offset: 0,
-                color: 'rgb(255, 158, 68)'
-              }, {
-                offset: 1,
-                color: 'rgb(255, 70, 131)'
-              }])
+            labelLine: {
+              normal: {
+                show: false
+              }
             },
-            data: data
+            data: [
+              {value: 100, name: '油菜花'},
+              {value: 146, name: '棉花'},
+              {value: 54, name: '其他'}
+            ]
+          },
+          {
+            name: '农作物',
+            type: 'pie',
+            radius: ['50%', '70%'],
+            center: ['70%', '50%'],
+            avoidLabelOverlap: false,
+            label: {
+              normal: {
+                show: true,
+                position: 'center',
+                formatter:function (argument) {
+                  var html;
+                  html='理赔总金额\r\n\r\n'+'200万';
+                  return html;
+                },
+                textStyle:{
+                  fontSize: 17,
+                  color:'#000'
+                }
+              },
+              emphasis: {
+                show: false,
+                textStyle: {
+                  fontSize: '30',
+                  fontWeight: 'bold'
+                }
+              }
+            },
+            labelLine: {
+              normal: {
+                show: false
+              }
+            },
+            data: [
+              {value: 100, name: '油菜花'},
+              {value: 146, name: '棉花'},
+              {value: 54, name: '其他'}
+            ]
           }
         ]
       }
       myChart.setOption(option)
-
+    },
+    initMap:function () {
+      var myMap = echarts.init(document.getElementById('myMap'))
+      echarts.registerMap('河北', JSON)
+      myMap.setOption(this.option)
     }
   }
 }

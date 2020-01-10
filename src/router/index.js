@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import $ from 'jquery'
 
 Vue.use(Router)
 
@@ -157,13 +158,13 @@ export const constantRoutes = [
     children: [
       {
         path: 'WaringCenter',
-        // component: () => import('@/views/errorPage/401'),
+        component: () => import('@/views/AIServer/warnCenter'),
         name: 'WaringCenter',
         meta: { title: '警报中心', noCache: true }
       },
       {
         path: 'PolicyInfo',
-        // component: () => import('@/views/AIServer/PolicyInfo'),
+        component: () => import('@/views/AIServer/policyInformation'),
         name: 'PolicyInfo',
         meta: { title: '保单信息', noCache: true }
       },
